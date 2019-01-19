@@ -1,0 +1,25 @@
+﻿<Window x:Class="Kinect.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:k="http://schemas.microsoft.com/kinect/2014"
+        xmlns:local="clr-namespace:Kinect"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        Closing="Window_Closing">
+    <Grid>
+        <k:KinectRegion Name="KinectRegionXAML">
+            <Grid>
+                <k:KinectUserViewer />
+                <Button Content="Next" HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="auto" FontSize="48" Click="NextButton_Click" />
+                <Button Content="Play" HorizontalAlignment="Left" Margin="94,229,0,0" VerticalAlignment="Top" Width="auto" FontSize="48" Click="PlayButton_Click" />
+                <Button Content="Stop" HorizontalAlignment="Left" Margin="290,229,0,0" VerticalAlignment="Top" Width="auto" FontSize="48" Click="StopButton_Click" />
+                <Button Content="Pause" HorizontalAlignment="Left" Margin="465,229,0,0" VerticalAlignment="Top" Width="auto" FontSize="48" Click="PauseButton_Click" />
+                <Button Content="Previous" HorizontalAlignment="Left" Margin="588,341,0,0" VerticalAlignment="Top" Width="auto" FontSize="48" Click="PreviousButton_Click" />
+                <Slider Name="Slider" Minimum="0" Maximum="1" IsEnabled="False" Thumb.DragStarted="Slider_DragStarted" Thumb.DragCompleted="Slider_DragCompleted" HorizontalAlignment="Left" Margin="94,135,0,0" VerticalAlignment="Top" Width="400"/>
+                <StackPanel Name="Tracks" HorizontalAlignment="Left" Height="100" Margin="670,126,0,0" VerticalAlignment="Top" Width="100"/>
+            </Grid>
+        </k:KinectRegion>
+    </Grid>
+</Window>
