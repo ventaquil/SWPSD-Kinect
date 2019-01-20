@@ -32,7 +32,7 @@ namespace Kinect
 
         private Playlist Playlist = new Playlist();
 
-        private int Slider_Value = 0;
+        private int TimeSlider_Value = 0;
 
         private bool IsDragging = false;
 
@@ -42,10 +42,10 @@ namespace Kinect
             InitializeKinect();
             InitializePlaylist();
             InitializeTracks();
-            InitializeCounter();
+            InitializeBackgroundThreads();
         }
 
-        private void InitializeCounter()
+        private void InitializeBackgroundThreads()
         {
             Task.Run(() =>
             {
@@ -58,6 +58,20 @@ namespace Kinect
                     Thread.Sleep(100); // sleep for 100ms
                 }
             });
+
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            backgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+            {
+                while (true)
+                {
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        Playlist.Volume = (int)VolumeSlider.Value;
+                    }));
+                    Thread.Sleep(100); // sleep for 100ms
+                }
+            };
+            backgroundWorker.RunWorkerAsync();
         }
 
         private void UpdateSliderValue(double position)
@@ -67,13 +81,13 @@ namespace Kinect
 
         private void UpdateSliderValue(int position)
         {
-            Slider_Value = position <= Playlist.Length ? position : Playlist.Length;
+            TimeSlider_Value = position <= Playlist.Length ? position : Playlist.Length;
 
             if (Playlist.Length > 0)
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    Slider.Value = Slider_Value / ((double)Playlist.Length);
+                    TimeSlider.Value = TimeSlider_Value / ((double)Playlist.Length);
                 }));
             }
         }
@@ -89,7 +103,7 @@ namespace Kinect
                 };
                 backgroundWorker.RunWorkerAsync();
 
-                Slider.IsEnabled = true;
+                TimeSlider.IsEnabled = true;
             }
 
             int index = 0;
@@ -170,20 +184,20 @@ namespace Kinect
             Playlist.Previous();
         }
 
-        private void Slider_DragCompleted(object sender, DragCompletedEventArgs e)
+        private void TimeSlider_DragCompleted(object sender, DragCompletedEventArgs e)
         {
             if (!Playlist.IsPlaying)
             {
-                Playlist.Play();
+                Playlist.PlayOnce();
             }
 
-            UpdateSliderValue(Slider.Value);
-            Playlist.Position = Slider_Value;
+            UpdateSliderValue(TimeSlider.Value);
+            Playlist.Position = TimeSlider_Value;
 
             IsDragging = false;
         }
 
-        private void Slider_DragStarted(object sender, DragStartedEventArgs e)
+        private void TimeSlider_DragStarted(object sender, DragStartedEventArgs e)
         {
             IsDragging = true;
         }

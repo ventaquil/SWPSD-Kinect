@@ -17,8 +17,18 @@
                 <Button Content="Stop" HorizontalAlignment="Left" Margin="290,229,0,0" VerticalAlignment="Top" Width="auto" FontSize="48" Click="StopButton_Click" />
                 <Button Content="Pause" HorizontalAlignment="Left" Margin="465,229,0,0" VerticalAlignment="Top" Width="auto" FontSize="48" Click="PauseButton_Click" />
                 <Button Content="Previous" HorizontalAlignment="Left" Margin="588,341,0,0" VerticalAlignment="Top" Width="auto" FontSize="48" Click="PreviousButton_Click" />
-                <Slider Name="Slider" Minimum="0" Maximum="1" IsEnabled="False" Thumb.DragStarted="Slider_DragStarted" Thumb.DragCompleted="Slider_DragCompleted" HorizontalAlignment="Left" Margin="94,135,0,0" VerticalAlignment="Top" Width="400"/>
+                <Slider Name="TimeSlider" IsMoveToPointEnabled="True" Minimum="0" Maximum="1" IsEnabled="False" Thumb.DragStarted="TimeSlider_DragStarted" Thumb.DragCompleted="TimeSlider_DragCompleted" HorizontalAlignment="Left" Margin="94,135,0,0" VerticalAlignment="Top" Width="400"/>
                 <StackPanel Name="Tracks" HorizontalAlignment="Left" Height="100" Margin="670,126,0,0" VerticalAlignment="Top" Width="100"/>
+                <Slider Name="VolumeSlider" HorizontalAlignment="Left" Minimum="0" Maximum="100" Value="20" Margin="552,97,0,0" VerticalAlignment="Top" Width="136" RenderTransformOrigin="0.5,0.5">
+                    <Slider.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Slider.RenderTransform>
+                </Slider>
             </Grid>
         </k:KinectRegion>
     </Grid>

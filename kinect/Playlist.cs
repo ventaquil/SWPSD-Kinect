@@ -54,6 +54,12 @@ namespace Kinect
             set => MusicPlayer.Position = TimeSpan.FromMilliseconds(value * 100);
         }
 
+        public int Volume
+        {
+            get => MusicPlayer.Volume;
+            set => MusicPlayer.Volume = value;
+        }
+
         public Playlist() : this(GetDefaultMMDevice())
         {
         }
