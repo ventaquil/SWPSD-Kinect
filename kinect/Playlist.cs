@@ -1,4 +1,5 @@
-﻿using CSCore.CoreAudioAPI;
+﻿using CSCore;
+using CSCore.CoreAudioAPI;
 using CSCore.SoundOut;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,10 @@ namespace Kinect
         private bool IsPlayingInLoop = false;
 
         private MusicPlayer MusicPlayer = new MusicPlayer();
+
+        public IWaveSource WaveSource { get => MusicPlayer.WaveSource; }
+
+        public BasicSpectrumProvider SpectrumProvider { get => MusicPlayer.SpectrumProvider; }
 
         public event EventHandler<int> TrackChanged;
 

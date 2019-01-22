@@ -1,10 +1,12 @@
 ﻿using CSCore.CoreAudioAPI;
+using CSCore.Streams;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit.Input;
 using Microsoft.Kinect.Wpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,6 +37,8 @@ namespace Kinect
         private int TimeSlider_Value = 0;
 
         private bool IsDragging = false;
+        
+        private System.Drawing.Size SpectrumImageSize;
 
         public MainWindow()
         {
@@ -43,35 +47,83 @@ namespace Kinect
             InitializePlaylist();
             InitializeTracks();
             InitializeBackgroundThreads();
-        }
 
+            SpectrumImageSize = new System.Drawing.Size((int)VisualisationImage.Width, (int)VisualisationImage.Height);
+        }
+        
         private void InitializeBackgroundThreads()
         {
-            Task.Run(() =>
+            BackgroundWorker positionBackgroundWorker = new BackgroundWorker();
+            positionBackgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
             {
                 while (true)
                 {
-                    if (!IsDragging)
+                    if (!IsDragging && (Playlist.WaveSource != null))
                     {
                         UpdateSliderValue(Playlist.Position);
                     }
                     Thread.Sleep(100); // sleep for 100ms
                 }
-            });
+            };
+            positionBackgroundWorker.RunWorkerAsync();
 
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
-            backgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+            BackgroundWorker volumeBackgroundWorker = new BackgroundWorker();
+            volumeBackgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
             {
                 while (true)
                 {
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        Playlist.Volume = (int)VolumeSlider.Value;
+                        if (Playlist.WaveSource != null)
+                        {
+                            Playlist.Volume = (int)VolumeSlider.Value;
+                        }
                     }));
                     Thread.Sleep(100); // sleep for 100ms
                 }
             };
-            backgroundWorker.RunWorkerAsync();
+            volumeBackgroundWorker.RunWorkerAsync();
+
+            BackgroundWorker spectrumBackgroundWorker = new BackgroundWorker();
+            spectrumBackgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+            {
+                while (true)
+                {
+                    if ((Playlist.SpectrumProvider != null) && (Playlist.WaveSource != null))
+                    {
+                        Bitmap bitmap;
+                        
+                        LineSpectrum llineSpectrum = new LineSpectrum(Playlist.SpectrumProvider.FftSize)
+                        {
+                            SpectrumProvider = Playlist.SpectrumProvider,
+                            UseAverage = true,
+                            BarCount = 50,
+                            BarSpacing = 2,
+                            IsXLogScale = true,
+                            ScalingStrategy = ScalingStrategy.Linear
+                        };
+
+                        if ((bitmap = llineSpectrum.CreateSpectrumLine(SpectrumImageSize, System.Drawing.Color.Green, System.Drawing.Color.Red, System.Drawing.Color.Black, true)) != null)
+                        {
+                            MemoryStream memoryStream = new MemoryStream();
+                            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Bmp);
+
+                            Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                BitmapImage bitmapImage = new BitmapImage();
+                                bitmapImage.BeginInit();
+                                bitmapImage.StreamSource = memoryStream;
+                                bitmapImage.EndInit();
+
+                                VisualisationImage.Source = bitmapImage;
+                            }));
+                        }
+                    }
+
+                    Thread.Sleep(100); // sleep for 100ms
+                }
+            };
+            spectrumBackgroundWorker.RunWorkerAsync();
         }
 
         private void UpdateSliderValue(double position)
@@ -169,7 +221,7 @@ namespace Kinect
             Playlist.Pause();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             Playlist.Stop();
         }

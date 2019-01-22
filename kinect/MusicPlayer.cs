@@ -1,7 +1,10 @@
 ﻿using CSCore;
 using CSCore.Codecs;
 using CSCore.CoreAudioAPI;
+using CSCore.DSP;
 using CSCore.SoundOut;
+using CSCore.Streams;
+using CSCore.Streams.Effects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +17,13 @@ namespace Kinect
     {
         private ISoundOut SoundOut;
 
-        private IWaveSource WaveSource;
+        public IWaveSource WaveSource { get; private set; }
+
+        public ISampleSource SampleSource { get; private set; }
+
+        public BasicSpectrumProvider SpectrumProvider { get; private set; }
+
+        public const FftSize FFTSIZE = FftSize.Fft4096;
 
         public event EventHandler<PlaybackStoppedEventArgs> PlaybackStopped;
 
@@ -88,10 +97,15 @@ namespace Kinect
         {
             CleanupPlayback();
 
-            WaveSource = CodecFactory.Instance.GetCodec(filename)
-                .ToSampleSource()
-                .ToMono()
-                .ToWaveSource();
+            SampleSource = CodecFactory.Instance.GetCodec(filename)
+                .ToSampleSource();
+
+            SpectrumProvider = new BasicSpectrumProvider(SampleSource.WaveFormat.Channels, SampleSource.WaveFormat.SampleRate, FFTSIZE);
+
+            SingleBlockNotificationStream notificationStream = new SingleBlockNotificationStream(SampleSource);
+            notificationStream.SingleBlockRead += (s, a) => SpectrumProvider.Add(a.Left, a.Right);
+
+            WaveSource = notificationStream.ToWaveSource();
 
             SoundOut = new WasapiOut() { Latency = 100, Device = device };
             SoundOut.Initialize(WaveSource);
@@ -134,10 +148,21 @@ namespace Kinect
                 SoundOut = null;
             }
 
+            if (SampleSource != null)
+            {
+                SampleSource.Dispose();
+                SampleSource = null;
+            }
+
             if (WaveSource != null)
             {
                 WaveSource.Dispose();
                 WaveSource = null;
+            }
+
+            if (SpectrumProvider != null)
+            {
+                SpectrumProvider = null;
             }
         }
     }

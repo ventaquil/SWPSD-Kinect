@@ -68,6 +68,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -86,7 +87,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BasicSpectrumProvider.cs" />
+    <Compile Include="ISpectrumProvider.cs" />
+    <Compile Include="LineSpectrum.cs" />
     <Compile Include="MusicPlayer.cs" />
+    <Compile Include="ScalingStrategy.cs" />
+    <Compile Include="SpectrumBase.cs" />
     <Compile Include="Track.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

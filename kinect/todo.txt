@@ -1,0 +1,7 @@
+- GUI
+ - utwory jako klikalna lista
+ - pasek g³oœnoœci
+ - pasek przewijania
+- visualiser
+- poprawienie next/previous
+- dodawanie plików z programu?
