@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:Kinect"
         mc:Ignorable="d"
         Title="KinectMusic" Height="460" Width="800"
+        ResizeMode="CanMinimize"
         Closing="Window_Closing">
     <Grid Background="Black">
         <k:KinectRegion Name="KinectRegionXAML">
