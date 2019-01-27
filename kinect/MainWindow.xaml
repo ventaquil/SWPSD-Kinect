@@ -12,24 +12,24 @@
         <k:KinectRegion Name="KinectRegionXAML">
             <Grid>
                 <k:KinectUserViewer />
-                <Button HorizontalAlignment="Left" Margin="100,300,0,0" VerticalAlignment="Top" Width="80" Click="PreviousButton_Click" >
+                <Button HorizontalAlignment="Left" Margin="95,300,0,0" VerticalAlignment="Top" Width="80" Click="PreviousButton_Click" >
                     <Image Source="Resources/prev.jpg"></Image>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="180,300,0,0" VerticalAlignment="Top" Width="80" Click="PlayButton_Click" >
+                <Button HorizontalAlignment="Left" Margin="175,300,0,0" VerticalAlignment="Top" Width="80" Click="PlayButton_Click" >
                     <Image Source="Resources/play.jpg"></Image>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="260,300,0,0" VerticalAlignment="Top" Width="80" Click="StopButton_Click" >
+                <Button HorizontalAlignment="Left" Margin="255,300,0,0" VerticalAlignment="Top" Width="80" Click="StopButton_Click" >
                     <Image Source="Resources/stop.jpg"></Image>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="340,300,0,0" VerticalAlignment="Top" Width="80" Click="PauseButton_Click" >
+                <Button HorizontalAlignment="Left" Margin="335,300,0,0" VerticalAlignment="Top" Width="80" Click="PauseButton_Click" >
                     <Image Source="Resources/pause.jpg"></Image>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="420,300,0,0" VerticalAlignment="Top" Width="80" Click="NextButton_Click" >
+                <Button HorizontalAlignment="Left" Margin="415,300,0,0" VerticalAlignment="Top" Width="80" Click="NextButton_Click" >
                     <Image Source="Resources/next.jpg"></Image>
                 </Button>
-                <Slider Name="TimeSlider" IsMoveToPointEnabled="True" Minimum="0" Maximum="1" IsEnabled="False" Thumb.DragStarted="TimeSlider_DragStarted" Thumb.DragCompleted="TimeSlider_DragCompleted" HorizontalAlignment="Left" Margin="105,196,0,0" VerticalAlignment="Top" Width="400"/>
+                <Slider Name="TimeSlider" IsMoveToPointEnabled="True" Minimum="0" Maximum="1" IsEnabled="False" Thumb.DragStarted="TimeSlider_DragStarted" Thumb.DragCompleted="TimeSlider_DragCompleted" HorizontalAlignment="Left" Margin="95,230,0,0" VerticalAlignment="Top" Width="400"/>
                 <StackPanel Name="Tracks" HorizontalAlignment="Left" Height="100" Margin="670,126,0,0" VerticalAlignment="Top" Width="100"/>
-                <Slider Name="VolumeSlider" HorizontalAlignment="Left" Minimum="0" Maximum="100" Value="20" Margin="552,97,0,0" VerticalAlignment="Top" Width="136" RenderTransformOrigin="0.5,0.5">
+                <Slider Name="VolumeSlider" HorizontalAlignment="Left" Minimum="0" Maximum="100" Value="20" Margin="450,100,0,0" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.5,0.5">
                     <Slider.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -39,7 +39,7 @@
                         </TransformGroup>
                     </Slider.RenderTransform>
                 </Slider>
-                <Image Name="VisualisationImage" HorizontalAlignment="Left" Height="100" Margin="94,49,0,0" VerticalAlignment="Top" Width="443"/>
+                <Image Name="VisualisationImage" HorizontalAlignment="Left" Height="200" Margin="95,10,0,0" VerticalAlignment="Top" Width="400"/>
             </Grid>
         </k:KinectRegion>
     </Grid>
