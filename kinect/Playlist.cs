@@ -88,7 +88,7 @@ namespace Kinect
         {
             using (MMDeviceEnumerator mmDeviceEnumerator = new MMDeviceEnumerator())
             {
-                return mmDeviceEnumerator.EnumAudioEndpoints(DataFlow.Render, DeviceState.Active).First();
+                return mmDeviceEnumerator.EnumAudioEndpoints(DataFlow.Render, DeviceState.Active).Last();
             }
         }
 
