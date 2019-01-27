@@ -76,7 +76,12 @@ namespace Kinect
                     {
                         if (Playlist.WaveSource != null)
                         {
-                            Playlist.Volume = (int)VolumeSlider.Value;
+                            try
+                            {
+                                Playlist.Volume = (int)VolumeSlider.Value;
+                            } catch (InvalidOperationException)
+                            {
+                            }
                         }
                     }));
                     Thread.Sleep(100); // sleep for 100ms
