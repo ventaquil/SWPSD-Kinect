@@ -37,7 +37,7 @@ namespace Kinect
         private int TimeSlider_Value = 0;
 
         private bool IsDragging = false;
-        
+
         private System.Drawing.Size SpectrumImageSize;
 
         public MainWindow()
@@ -50,7 +50,7 @@ namespace Kinect
 
             SpectrumImageSize = new System.Drawing.Size((int)VisualisationImage.Width, (int)VisualisationImage.Height);
         }
-        
+
         private void InitializeBackgroundThreads()
         {
             BackgroundWorker positionBackgroundWorker = new BackgroundWorker();
@@ -79,7 +79,8 @@ namespace Kinect
                             try
                             {
                                 Playlist.Volume = (int)VolumeSlider.Value;
-                            } catch (InvalidOperationException)
+                            }
+                            catch (InvalidOperationException)
                             {
                             }
                         }
@@ -97,7 +98,7 @@ namespace Kinect
                     if ((Playlist.SpectrumProvider != null) && (Playlist.WaveSource != null))
                     {
                         Bitmap bitmap;
-                        
+
                         LineSpectrum llineSpectrum = new LineSpectrum(Playlist.SpectrumProvider.FftSize)
                         {
                             SpectrumProvider = Playlist.SpectrumProvider,
@@ -163,6 +164,8 @@ namespace Kinect
                 TimeSlider.IsEnabled = true;
             }
 
+            Tracks.Children.Clear();
+
             int index = 0;
             foreach (Track track in Playlist.GetTracks())
             {
@@ -184,6 +187,8 @@ namespace Kinect
 
         private void InitializePlaylist()
         {
+            Playlist.Clear();
+
             foreach (string path in Directory.GetFiles(PlaylistDirectory))
             {
                 Track track = new Track(path);
@@ -257,6 +262,27 @@ namespace Kinect
         private void TimeSlider_DragStarted(object sender, DragStartedEventArgs e)
         {
             IsDragging = true;
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Filter = "MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav";
+
+            bool? result = dialog.ShowDialog();
+            if (result == true)
+            {
+                string playlistDirectory = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Playlist");
+
+                string filename = System.IO.Path.GetFileName(dialog.FileName);
+
+                string oldFilePath = dialog.FileName;
+                string newFilePath = System.IO.Path.Combine(playlistDirectory, filename);
+                File.Copy(oldFilePath, newFilePath, true);
+
+                InitializePlaylist();
+                InitializeTracks();
+            }
         }
     }
 }
