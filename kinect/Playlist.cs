@@ -75,7 +75,7 @@ namespace Kinect
 
             MusicPlayer.PlaybackStopped += (object sender, PlaybackStoppedEventArgs e) =>
             {
-                if (IsPlayingInLoop && (Position == Length))
+                if (IsPlayingInLoop && (Position >= Length))
                 {
                     NextTrack();
 
