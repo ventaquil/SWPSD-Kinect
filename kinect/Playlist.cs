@@ -92,6 +92,11 @@ namespace Kinect
             }
         }
 
+        public void Clear()
+        {
+            Tracks.Clear();
+        }
+
         public void Add(Track track)
         {
             if (!Tracks.Contains(track))
